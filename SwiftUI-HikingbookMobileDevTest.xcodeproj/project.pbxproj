@@ -16,6 +16,7 @@
 		C7F543692A35BAE500AC222B /* SwiftUI_HikingbookMobileDevTestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F543682A35BAE500AC222B /* SwiftUI_HikingbookMobileDevTestTests.swift */; };
 		C7F543732A35BAE500AC222B /* SwiftUI_HikingbookMobileDevTestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F543722A35BAE500AC222B /* SwiftUI_HikingbookMobileDevTestUITests.swift */; };
 		C7F543752A35BAE500AC222B /* SwiftUI_HikingbookMobileDevTestUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F543742A35BAE500AC222B /* SwiftUI_HikingbookMobileDevTestUITestsLaunchTests.swift */; };
+		C7F543832A35BCE400AC222B /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = C7F543822A35BCE400AC222B /* ComposableArchitecture */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7F543832A35BCE400AC222B /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,6 +151,9 @@
 			dependencies = (
 			);
 			name = "SwiftUI-HikingbookMobileDevTest";
+			packageProductDependencies = (
+				C7F543822A35BCE400AC222B /* ComposableArchitecture */,
+			);
 			productName = "SwiftUI-HikingbookMobileDevTest";
 			productReference = C7F5434F2A35BAE300AC222B /* SwiftUI-HikingbookMobileDevTest.app */;
 			productType = "com.apple.product-type.application";
@@ -221,6 +226,9 @@
 				Base,
 			);
 			mainGroup = C7F543462A35BAE300AC222B;
+			packageReferences = (
+				C7F543812A35BCE400AC222B /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+			);
 			productRefGroup = C7F543502A35BAE300AC222B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -353,7 +361,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -407,7 +415,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -591,6 +599,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C7F543812A35BCE400AC222B /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.54.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C7F543822A35BCE400AC222B /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7F543812A35BCE400AC222B /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		C7F5435D2A35BAE500AC222B /* SwiftUI_HikingbookMobileDevTest.xcdatamodeld */ = {
