@@ -5,17 +5,18 @@
 //  Created by Stephen on 2023/6/11.
 //
 
-import SwiftUI
-import Foundation
+import ComposableArchitecture
 import CoreData
+import SwiftUI
 
 struct ContentView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.title, ascending: false)],
-        animation: .default)
-    private var items: FetchedResults<Item>
+  @Environment(\.managedObjectContext) private var viewContext
+  
+  @FetchRequest(
+    sortDescriptors: [NSSortDescriptor(keyPath: \Item.title, ascending: false)],
+    animation: .default)
+  private var items: FetchedResults<Item>
+  let store: StoreOf<QuoteFetching>
   
   let width = UIScreen.main.bounds.width
   let rowTextPaddingWidth: CGFloat = 12
@@ -23,21 +24,22 @@ struct ContentView: View {
   
   var body: some View {
     NavigationView {
-      ScrollView {
-        LazyVStack(spacing: 10) {
-          ForEach(items) { item in
-            ZStack {
-              HStack(spacing: 0) {
-                Color.white
-                  .padding()
-                  .frame(width: rowLeftRightPaddingWidth)
-                RoundedRectangle(cornerRadius: 10)
-                  .stroke(lineWidth: 1)
-                  .foregroundColor(.black)
-                Color.white
-                  .padding()
-                  .frame(width: rowLeftRightPaddingWidth)
-              }
+      VStack {
+        ScrollView {
+          LazyVStack(spacing: 10) {
+            ForEach(items) { item in
+              ZStack {
+                HStack(spacing: 0) {
+                  Color.white
+                    .padding()
+                    .frame(width: rowLeftRightPaddingWidth)
+                  RoundedRectangle(cornerRadius: 10)
+                    .stroke(lineWidth: 1)
+                    .foregroundColor(.black)
+                  Color.white
+                    .padding()
+                    .frame(width: rowLeftRightPaddingWidth)
+                }
                 NavigationLink {
                   // 到下一頁的內容
                   Text("Item at \(item.dueDate ?? Date(), formatter: itemFormatter)")
@@ -53,9 +55,25 @@ struct ContentView: View {
                 }
                 .padding(EdgeInsets(top: 10, leading: rowTextPaddingWidth, bottom: 10, trailing: rowTextPaddingWidth))
               }
-            
+              
+            }
+            .onDelete(perform: deleteItems)
           }
-          .onDelete(perform: deleteItems)
+        }
+        ZStack {
+          WithViewStore(store) { $0
+          } content: { viewStore in
+            
+            Rectangle()
+              .frame(height: 100)
+              .onAppear {
+                viewStore.send(.getQuoteAction)
+              }
+            Text(
+              (viewStore.quoteSentence ?? "API Failed")
+            )
+              .foregroundColor(.white)
+          }
         }
       }
       .toolbar {
@@ -116,20 +134,17 @@ private let itemFormatter: DateFormatter = {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+      ContentView(store: Store(initialState: QuoteFetching.State(), reducer: {
+        QuoteFetching {
+          if let url = URL(string: quoteUrlString),
+             let (data, _) = try? await URLSession.shared.data(from: url) {
+            let decoding = JSONDecoder()
+            let decodingData = try? decoding.decode(QuoteType.self, from: data)
+            return decodingData
+          } else {
+            return nil
+          }
+        }
+      })).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
-
-
-//class ToDoList: NSManagedObject {
-//  var title: String
-////  var description: String
-//  var createdDate: Date
-////  var dueDate: Date
-////  var location: String
-//
-//  init(title: String, createdDate: Date) {
-//    self.title = title
-//    self.createdDate = createdDate
-//  }
-//}

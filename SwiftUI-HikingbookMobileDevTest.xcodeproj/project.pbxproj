@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C7E1DFF22A37504000455883 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E1DFF12A37504000455883 /* DataModel.swift */; };
+		C7E1DFF42A3753BF00455883 /* QuoteFetching.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E1DFF32A3753BF00455883 /* QuoteFetching.swift */; };
 		C7F543532A35BAE300AC222B /* SwiftUI_HikingbookMobileDevTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F543522A35BAE300AC222B /* SwiftUI_HikingbookMobileDevTestApp.swift */; };
 		C7F543552A35BAE300AC222B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F543542A35BAE300AC222B /* ContentView.swift */; };
 		C7F543572A35BAE500AC222B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7F543562A35BAE500AC222B /* Assets.xcassets */; };
@@ -37,6 +39,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C7E1DFF12A37504000455883 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
+		C7E1DFF32A3753BF00455883 /* QuoteFetching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteFetching.swift; sourceTree = "<group>"; };
 		C7F5434F2A35BAE300AC222B /* SwiftUI-HikingbookMobileDevTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI-HikingbookMobileDevTest.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7F543522A35BAE300AC222B /* SwiftUI_HikingbookMobileDevTestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_HikingbookMobileDevTestApp.swift; sourceTree = "<group>"; };
 		C7F543542A35BAE300AC222B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -105,6 +109,8 @@
 				C7F543562A35BAE500AC222B /* Assets.xcassets */,
 				C7F5435B2A35BAE500AC222B /* Persistence.swift */,
 				C7F5435D2A35BAE500AC222B /* SwiftUI_HikingbookMobileDevTest.xcdatamodeld */,
+				C7E1DFF12A37504000455883 /* DataModel.swift */,
+				C7E1DFF32A3753BF00455883 /* QuoteFetching.swift */,
 				C7F543582A35BAE500AC222B /* Preview Content */,
 			);
 			path = "SwiftUI-HikingbookMobileDevTest";
@@ -271,7 +277,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7E1DFF22A37504000455883 /* DataModel.swift in Sources */,
 				C7F5435C2A35BAE500AC222B /* Persistence.swift in Sources */,
+				C7E1DFF42A3753BF00455883 /* QuoteFetching.swift in Sources */,
 				C7F543552A35BAE300AC222B /* ContentView.swift in Sources */,
 				C7F5435F2A35BAE500AC222B /* SwiftUI_HikingbookMobileDevTest.xcdatamodeld in Sources */,
 				C7F543532A35BAE300AC222B /* SwiftUI_HikingbookMobileDevTestApp.swift in Sources */,
