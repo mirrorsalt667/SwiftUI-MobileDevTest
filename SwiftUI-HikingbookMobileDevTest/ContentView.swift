@@ -13,7 +13,7 @@ struct ContentView: View {
   @Environment(\.managedObjectContext) private var viewContext
   
   @FetchRequest(
-    sortDescriptors: [NSSortDescriptor(keyPath: \Item.title, ascending: false)],
+    sortDescriptors: [NSSortDescriptor(keyPath: \Item.dueDate, ascending: true)],
     animation: .default)
   private var items: FetchedResults<Item>
   let store: StoreOf<QuoteFetching>
@@ -21,6 +21,16 @@ struct ContentView: View {
   let width = UIScreen.main.bounds.width
   let rowTextPaddingWidth: CGFloat = 12
   let rowLeftRightPaddingWidth: CGFloat = 10
+  
+  // new Item
+  @State private var itemTitle = ""
+  @State private var itemDescription = ""
+  @State private var itemCreatedDate = Date()
+  @State private var itemDueDate = Date()
+  @State private var itemLocation = ""
+  
+  @State private var isNewPageOpen = false
+  @State private var isEditPageOpen = false
   
   var body: some View {
     NavigationView {
@@ -40,12 +50,12 @@ struct ContentView: View {
                     .padding()
                     .frame(width: rowLeftRightPaddingWidth)
                 }
-                NavigationLink {
+                NavigationLink(isActive: $isEditPageOpen) {
                   // 到下一頁的內容
-                  Text("Item at \(item.dueDate ?? Date(), formatter: itemFormatter)")
+                  editItemPage()
                 } label: {
                   VStack {
-                    Text(item.title ?? "111")
+                    Text(item.title ?? "")
                       .frame(width: (width-rowTextPaddingWidth*2), alignment: .leading)
                       .foregroundColor(.black)
                     Text("Due Date: \(item.dueDate ?? Date(), formatter: itemFormatter)")
@@ -77,16 +87,110 @@ struct ContentView: View {
         }
       }
       .toolbar {
-        ToolbarItem(placement: .navigationBarTrailing) {
-          EditButton()
-        }
         ToolbarItem {
-          Button(action: addItem) {
+          NavigationLink(isActive: $isNewPageOpen) {
+            // 到下一頁的內容
+            newItemPage()
+          } label: {
             Label("Add Item", systemImage: "plus")
           }
         }
       }
       Text("Select an item")
+    }
+  }
+  
+  // MARK: - ViewBuild
+  
+  @ViewBuilder
+  private func newItemPage() -> some View {
+    VStack {
+      HStack {
+        Text("Title: ")
+        TextField("ex: See a ductor.", text: $itemTitle)
+          .border(.black)
+      }
+      .padding(5)
+      HStack {
+        Text("Description: ")
+        TextField("ex: Take the Bus 123.", text: $itemDescription)
+          .border(.black)
+      }
+      .padding(5)
+      HStack {
+        Text("Create Date: ")
+        DatePicker(selection: $itemCreatedDate) {
+//          Text("\(itemCreatedDate, formatter: itemFormatter)")
+        }
+      }
+      .padding(5)
+      HStack {
+        Text("Due Date: ")
+        DatePicker(selection: $itemDueDate) {
+//          Text("\(itemCreatedDate, formatter: itemFormatter)")
+        }
+      }
+      .padding(5)
+      HStack {
+        Text("Location: ")
+        TextField("ex: 25.0174719, 121.3662922.", text: $itemLocation)
+          .border(.black)
+      }
+      .padding(5)
+      Button {
+        isNewPageOpen = false
+        addItem()
+      } label: {
+        Text("新增To-Do List")
+          .padding(5)
+      }
+      .border(.black)
+      Color.white
+    }
+  }
+  
+  private func editItemPage() -> some View {
+    VStack {
+      HStack {
+        Text("Title: ")
+        TextField("ex: See a ductor.", text: $itemTitle)
+          .border(.black)
+      }
+      .padding(5)
+      HStack {
+        Text("Description: ")
+        TextField("ex: Take the Bus 123.", text: $itemDescription)
+          .border(.black)
+      }
+      .padding(5)
+      HStack {
+        Text("Create Date: ")
+        DatePicker(selection: $itemCreatedDate) {
+//          Text("\(itemCreatedDate, formatter: itemFormatter)")
+        }
+      }
+      .padding(5)
+      HStack {
+        Text("Due Date: ")
+        DatePicker(selection: $itemDueDate) {
+//          Text("\(itemCreatedDate, formatter: itemFormatter)")
+        }
+      }
+      .padding(5)
+      HStack {
+        Text("Location: ")
+        TextField("ex: 25.0174719, 121.3662922.", text: $itemLocation)
+          .border(.black)
+      }
+      .padding(5)
+      Button {
+        isEditPageOpen = false
+      } label: {
+        Text("刪除To-Do List")
+          .padding(5)
+      }
+      .border(.black)
+      Color.white
     }
   }
 
@@ -95,14 +199,15 @@ struct ContentView: View {
   private func addItem() {
     withAnimation {
       let newItem = Item(context: viewContext)
-      newItem.title = "See a doctor."
-      newItem.createdDate = Date()
+      newItem.title = itemTitle
+      newItem.descriptionString = itemDescription
+      newItem.createdDate = itemCreatedDate
+      newItem.dueDate = itemDueDate
+      newItem.location = itemLocation
       
       do {
         try viewContext.save()
       } catch {
-        // Replace this implementation with code to handle the error appropriately.
-        // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
         let nsError = error as NSError
         fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
       }
@@ -116,8 +221,6 @@ struct ContentView: View {
             do {
                 try viewContext.save()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nsError = error as NSError
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
@@ -136,14 +239,14 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
       ContentView(store: Store(initialState: QuoteFetching.State(), reducer: {
         QuoteFetching {
-          if let url = URL(string: quoteUrlString),
-             let (data, _) = try? await URLSession.shared.data(from: url) {
-            let decoding = JSONDecoder()
-            let decodingData = try? decoding.decode(QuoteType.self, from: data)
-            return decodingData
-          } else {
+//          if let url = URL(string: quoteUrlString),
+//             let (data, _) = try? await URLSession.shared.data(from: url) {
+//            let decoding = JSONDecoder()
+//            let decodingData = try? decoding.decode(QuoteType.self, from: data)
+//            return decodingData
+//          } else {
             return nil
-          }
+//          }
         }
       })).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
